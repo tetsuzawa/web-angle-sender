@@ -1,6 +1,6 @@
 # web-angle-sender
 
-> My finest Nuxt.js project
+> My awesome Nuxt.js project
 
 ## Build Setup
 
