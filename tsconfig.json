@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "types": [
+      "@types/node",
+      "@nuxt/vue-app",
+      "@nuxtjs/vuetify"
+    ]
+  }
+}

@@ -25,6 +25,7 @@ export default {
   ** Global CSS
   */
   css: [
+    '@mdi/font/css/materialdesignicons.css'
   ],
   /*
   ** Plugins to load before mounting the App
@@ -36,6 +37,8 @@ export default {
   */
   buildModules: [
     '@nuxtjs/vuetify',
+    '@nuxt/typescript-build'
+
   ],
   /*
   ** Nuxt.js modules
@@ -57,7 +60,7 @@ export default {
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
-      dark: true,
+      dark: false,
       themes: {
         dark: {
           primary: colors.blue.darken2,
@@ -69,7 +72,7 @@ export default {
           success: colors.green.accent3
         }
       }
-    }
+    },
   },
   /*
   ** Build configuration
@@ -80,5 +83,9 @@ export default {
     */
     extend (config, ctx) {
     }
+  },
+  server: {
+    host: process.env.FRONTEND_HOST || '0.0.0.0',
+    port: process.env.FRONTEND_PORT || '80'
   }
 }
