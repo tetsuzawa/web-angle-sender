@@ -6,7 +6,7 @@
         web-angle-sender
       </h1>
       <h2 class="subtitle">
-        My super Nuxt.js project
+        My finest Nuxt.js project
       </h2>
       <div class="links">
         <a
