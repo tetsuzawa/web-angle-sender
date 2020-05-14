@@ -1,28 +1,31 @@
 <template>
-  <v-container>
-    <v-row class="blue lighten-4" style="height: 800px;" justify="center" align-content="center">
-      <!--      <v-col class="green">-->
-      <div style="height: 400px; width: 400px;" id="circle-box">
-        <!--        <v-btn fab color="primary" class="circle-element" :style="circleElementStyles[i-1]" v-for="i in numCircleElements" ref="circleElements">{{i}}</v-btn>-->
-        <v-btn fab color="primary" style="width: 40px;height: 40px;" class="circle-element"
-               v-for="i in numCircleElements" ref="circleElements">{{i}}
-        </v-btn>
-      </div>
-      <!--      </v-col>-->
-    </v-row>
-
-    <v-row justify="center" align-content="center">
-    <span>
-      <v-icon color="red">clockwise-arrows</v-icon>
-      <v-icon v-if="clockwise" color="red">mdi-clockwise-arrows</v-icon>
-      <v-icon v-else color="red">mdi-counterclockwise-arrows</v-icon>
-    </span>
-      <v-btn rounded @click="invertRotation" color="primary" class="button__rotation">
-        Rotation
-        {{clockwise}}
-      </v-btn>
-    </v-row>
-  </v-container>
+  <v-app id="angle-sender">
+    <v-content>
+      <v-container class="grey lighten-5" fluid>
+        <v-responsive :aspect-ratio="1">
+          <v-row class="blue lighten-4" style="height: 100%;" justify="center" align-content="center">
+            <v-col class="green lighten-4" style="height:100%">
+              <div style="height: 100%; width: 100%" id="circle-box" ref="circleBox">
+                <v-btn fab x-small icon color="primary" style="width: 10%;height: 10%;" class="circle-element"
+                       v-for="i in 36" ref="circleElements">{{i-1}}
+                </v-btn>
+              </div>
+            </v-col>
+          </v-row>
+        </v-responsive>
+        <v-row class="blue lighten-4" style="padding: 5%;" justify="center" align-content="center">
+          <v-col class="green lighten-4" style="height:100%">
+            <v-btn rounded @click="invertRotation" color="primary" class="button__rotation">
+            <span>
+              <v-icon v-if="clockwise">mdi-autorenew</v-icon>
+              <v-icon v-else>mdi-sync</v-icon>
+            </span>
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-content>
+  </v-app>
 </template>
 
 <script>
@@ -33,7 +36,6 @@
     name: "sender",
     data() {
       return {
-        numCircleElements: 36,
         clockwise: true,
         // circleElementStyles: [
         //   "left: 30px",
@@ -50,42 +52,40 @@
     mounted() {
       // circleDeployer()
       const circleElements = this.$refs.circleElements
-      console.log("circleElements")
       console.log(circleElements)
-      const circleBox = document.getElementById('circle-box')
-      const radius = parseFloat(circleBox.style.width) / 2.0;
+      const circleBox = this.$refs.circleBox
+      const radius = parseFloat(circleBox.offsetHeight) / 2.0;
+      const offsetLeft = parseFloat(circleBox.offsetWidth) / 2.0;
+      // const radius = 100;
       console.log("radius")
       console.log(radius)
 
-      // const circleElements = document.getElementsByClassName('circle-element')
       //item要素数から角度を計算
-      var angle = 360.0 / circleElements.length;
-      console.log("angle")
-      console.log(angle)
-
-      console.log("circleElements[0].$el.style.width")
-      console.log(circleElements[0].$el.style.width)
-      console.log("parseFloat(circleElements[0].$el.style.width)")
-      console.log(parseFloat(circleElements[0].$el.style.width))
+      const angle = 360.0 / circleElements.length;
 
       //item要素の幅,高さの2分の1を取得
-      const l = parseFloat(circleElements[0].$el.style.width) / 2.0;
-      const h = parseFloat(circleElements[0].$el.style.height) / 2.0;
-      console.log("l")
-      console.log(l)
+      const l = parseFloat(circleElements[0].$el.offsetWidth) / 2.0;
+      const h = parseFloat(circleElements[0].$el.offsetWidth) / 2.0;
 
       //指定
       for (let i = 0; i < circleElements.length; i++) {
         let deg = angle * i
-        let x = Math.cos(deg * Math.PI / 180) * radius + radius;
-        let y = Math.sin(deg * Math.PI / 180) * radius + radius;
+        let x = Math.cos(deg * Math.PI / 180 - (Math.PI / 2)) * radius + offsetLeft;
+        let y = Math.sin(deg * Math.PI / 180 - (Math.PI / 2)) * radius + radius;
         let circleElement = circleElements[i];
-        console.log("circleElement.$el.style.left")
-        console.log(circleElement.$el.style.left)
         circleElement.$el.style.left = `${x - l}px`;
-        console.log("circleElement.style.left")
-        console.log(circleElement.$el.style.left)
         circleElement.$el.style.top = `${y - h}px`;
+
+        // スクロール関連メソッド
+        function scroll_control(event) {
+          event.preventDefault();
+        }
+        (function no_scroll(){
+          // PCでのスクロール禁止
+          document.addEventListener("mousewheel", scroll_control, {passive: false});
+          // スマホでのタッチ操作でのスクロール禁止
+          document.addEventListener("touchmove", scroll_control, {passive: false});
+        })();
       }
     }
   }
@@ -94,9 +94,9 @@
 <style scoped lang="scss">
   #circle-box {
     position: relative;
+
     .circle-element {
       position: absolute;
     }
   }
-
 </style>
